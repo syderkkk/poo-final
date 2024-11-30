@@ -1,25 +1,20 @@
 package view;
 
 import controller.RegistroController;
-import dao.impl.UsuarioDAOImpl;
-import dao.interfaces.IUsuarioDAO;
-import model.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.SQLException;
 
 public class RegistroFrame extends JFrame {
 
     private JTextField nombreField, apellidosField, telefonoField, direccionField, correoField;
     private JPasswordField contrasenaField;
     private JButton registrarButton, cancelarButton;
-    private IUsuarioDAO usuarioDAO = new UsuarioDAOImpl();
     private RegistroController registroController;
 
     public RegistroFrame() {
         // Crear instancia del controlador
-        registroController = new RegistroController();
+        registroController = new RegistroController(this);
 
         setTitle("Registro de Usuario");
         setSize(400, 300);
@@ -72,23 +67,11 @@ public class RegistroFrame extends JFrame {
             String correo = correoField.getText();
             String contrasena = new String(contrasenaField.getPassword());
 
-            // Llamar al controlador para manejar el registro
-            boolean registroExitoso = registroController.registrarUsuario(
-                    nombre, apellidos, telefono, direccion, correo, contrasena, usuarioDAO
-            );
-
-            // Si el registro es exitoso, cerrar el frame y abrir el login
-            if (registroExitoso) {
-                JOptionPane.showMessageDialog(this, "Registro exitoso. Inicia sesión.");
-                dispose(); // Cerrar el RegistroFrame
-                new LoginFrame().setVisible(true); // Abrir el LoginFrame
-            }
+            // Delegar lógica al controlador
+            registroController.registrarUsuario(nombre, apellidos, telefono, direccion, correo, contrasena);
         });
 
         // Acción del botón Cancelar
-        cancelarButton.addActionListener(e -> {
-            dispose();
-            new LoginFrame().setVisible(true);
-        });
+        cancelarButton.addActionListener(e -> registroController.cancelarRegistro());
     }
 }

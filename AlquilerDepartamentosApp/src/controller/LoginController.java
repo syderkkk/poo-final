@@ -3,39 +3,56 @@ package controller;
 import dao.interfaces.IUsuarioDAO;
 import model.Usuario;
 import utils.Validaciones;
+import view.LoginFrame;
+import view.MainFrame;
+import view.RegistroFrame;
 
 import javax.swing.*;
 
 public class LoginController {
 
-    private IUsuarioDAO usuarioDAO;
+    private final LoginFrame loginFrame;
+    private final IUsuarioDAO usuarioDAO;
 
-    public LoginController(IUsuarioDAO usuarioDAO) {
+    public LoginController(LoginFrame loginFrame, IUsuarioDAO usuarioDAO) {
+        this.loginFrame = loginFrame;
         this.usuarioDAO = usuarioDAO;
     }
 
-    // Validar que las credenciales sean correctas
-    public Usuario autenticarUsuario(String correo, String contrasena) {
+    // Manejar el inicio de sesión
+    public void handleLogin() {
+        String correo = loginFrame.getCorreo();
+        String contrasena = loginFrame.getContrasena();
+
+
+        // Validar que el correo sea válido
+        /*
+        if (!Validaciones.validarCorreo(correo)) {
+            return; // No continuar con la autenticación
+        }
+
+         */
         try {
 
-            /*
-            // Usar la validación de correo desde la clase Validaciones
-            if (!Validaciones.validarCorreo(correo)) {
-                return null; // No continúa si el correo es inválido
-            }
-             */
-
-            Usuario usuario = usuarioDAO.obtenerUsuarioPorCorreo(correo); // Buscar al usuario por correo
+            Usuario usuario = usuarioDAO.obtenerUsuarioPorCorreo(correo);
 
             if (usuario == null || !usuario.getContrasena().equals(contrasena)) {
-                JOptionPane.showMessageDialog(null, "Correo o contraseña incorrectos.", "Error de autenticación", JOptionPane.ERROR_MESSAGE);
-                return null;
+                loginFrame.mostrarMensaje("Correo o contraseña incorrectos.", "Error de autenticación", JOptionPane.ERROR_MESSAGE);
+                return;
             }
 
-            return usuario; // Devuelve el usuario autenticado
+            loginFrame.mostrarMensaje("Inicio de sesión exitoso, bienvenido " + usuario.getNombre() + "!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            loginFrame.dispose();
+            new MainFrame().setVisible(true);
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al autenticar usuario: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            return null;
+            loginFrame.mostrarMensaje("Error al autenticar usuario: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    // Manejar la transición al registro
+    public void handleRegister() {
+        loginFrame.dispose();
+        new RegistroFrame().setVisible(true);
     }
 }

@@ -57,9 +57,11 @@ public class DepartamentoController {
 
             // Guardar en la base de datos
             departamentoDAO.guardar(nuevoDepartamento);
+
             ((MainFrame) parent).cargarTabla();
             frame.dispose();
             parent.setVisible(true);
+
             JOptionPane.showMessageDialog(frame, "Departamento agregado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(frame, "Error al guardar el departamento: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

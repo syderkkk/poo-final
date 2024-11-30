@@ -3,11 +3,9 @@ package view;
 import controller.LoginController;
 import dao.impl.UsuarioDAOImpl;
 import dao.interfaces.IUsuarioDAO;
-import model.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
-import java.sql.SQLException;
 
 public class LoginFrame extends JFrame {
 
@@ -20,13 +18,13 @@ public class LoginFrame extends JFrame {
     public LoginFrame() {
         // Crear el objeto DAO y el controlador
         IUsuarioDAO usuarioDAO = new UsuarioDAOImpl();
-        loginController = new LoginController(usuarioDAO);
+        loginController = new LoginController(this, usuarioDAO);
 
-        // Configurar la ventana principal (JFrame)
+        // Configurar la ventana principal
         setTitle("Iniciar sesión");
         setSize(300, 250);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
+        setLocationRelativeTo(null);
 
         // Crear los componentes
         JLabel emailLabel = new JLabel("Correo:");
@@ -38,7 +36,7 @@ public class LoginFrame extends JFrame {
 
         // Crear un panel para organizar los componentes
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 2, 10, 10)); // GridLayout de 4 filas y 2 columnas
+        panel.setLayout(new GridLayout(4, 2, 10, 10));
 
         // Agregar los componentes al panel
         panel.add(emailLabel);
@@ -47,32 +45,26 @@ public class LoginFrame extends JFrame {
         panel.add(passwordField);
         panel.add(new JLabel()); // Espacio vacío
         panel.add(loginButton);
-        panel.add(registerButton); // Botón de registro
+        panel.add(registerButton);
 
         // Agregar el panel a la ventana principal
         add(panel, BorderLayout.CENTER);
 
-        // Configurar la acción del botón "Iniciar sesión"
-        loginButton.addActionListener(e -> iniciarSesion());
-
-        // Configurar la acción del botón "Registrar"
-        registerButton.addActionListener(e -> {
-            dispose(); // Cerrar el LoginFrame
-            new RegistroFrame().setVisible(true); // Abrir la ventana de registro
-        });
+        // Configurar acciones de botones
+        loginButton.addActionListener(e -> loginController.handleLogin());
+        registerButton.addActionListener(e -> loginController.handleRegister());
     }
 
-    // Método para iniciar sesión
-    private void iniciarSesion() {
-        String correo = emailField.getText().trim();
-        String contrasena = new String(passwordField.getPassword());
+    // Getters para los campos de texto y contraseñas
+    public String getCorreo() {
+        return emailField.getText().trim();
+    }
 
-        Usuario usuario = loginController.autenticarUsuario(correo, contrasena);
+    public String getContrasena() {
+        return new String(passwordField.getPassword());
+    }
 
-        if (usuario != null) {
-            JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso, bienvenido " + usuario.getNombre() + "!");
-            dispose(); // Cerrar el LoginFrame
-            new MainFrame().setVisible(true); // Abrir la ventana principal
-        }
+    public void mostrarMensaje(String mensaje, String titulo, int tipoMensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, titulo, tipoMensaje);
     }
 }
