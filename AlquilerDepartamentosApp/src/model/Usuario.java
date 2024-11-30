@@ -1,28 +1,22 @@
 package model;
 
-public class Cliente {
+public class Usuario {
 
     private int id;
     private String nombre;
-    private String apellidos;
     private String telefono;
     private String direccion;
-    private String tipoUsuario; // Ejemplo: "Propietario" o "Inquilino"
     private String correo;
     private String contrasena;
 
-    public Cliente(int id, String nombre, String apellidos, String telefono, String direccion, String tipoUsuario, String correo, String contrasena) {
-        this.id = id;
+    public Usuario(String nombre, String telefono, String direccion, String correo, String contrasena) {
         this.nombre = nombre;
-        this.apellidos = apellidos;
         this.telefono = telefono;
         this.direccion = direccion;
-        this.tipoUsuario = tipoUsuario;
         this.correo = correo;
         this.contrasena = contrasena;
     }
 
-    // Getters y Setters
     public int getId() {
         return id;
     }
@@ -39,14 +33,6 @@ public class Cliente {
         this.nombre = nombre;
     }
 
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
     public String getTelefono() {
         return telefono;
     }
@@ -61,14 +47,6 @@ public class Cliente {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
-    }
-
-    public String getTipoUsuario() {
-        return tipoUsuario;
-    }
-
-    public void setTipoUsuario(String tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
     }
 
     public String getCorreo() {
