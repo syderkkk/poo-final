@@ -2,7 +2,6 @@ package controller;
 
 import dao.interfaces.IUsuarioDAO;
 import model.Usuario;
-import utils.Validaciones;
 import view.LoginFrame;
 import view.MainFrame;
 import view.RegistroFrame;
@@ -33,7 +32,6 @@ public class LoginController {
 
          */
         try {
-
             Usuario usuario = usuarioDAO.obtenerUsuarioPorCorreo(correo);
 
             if (usuario == null || !usuario.getContrasena().equals(contrasena)) {
@@ -41,7 +39,7 @@ public class LoginController {
                 return;
             }
 
-            loginFrame.mostrarMensaje("Inicio de sesión exitoso, bienvenido " + usuario.getNombre() + "!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            //loginFrame.mostrarMensaje("Inicio de sesión exitoso, bienvenido " + usuario.getNombre() + "!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             loginFrame.dispose();
             new MainFrame().setVisible(true);
 

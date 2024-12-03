@@ -2,7 +2,9 @@ package view;
 
 import controller.DepartamentoController;
 import dao.impl.DepartamentoDAOImpl;
+import dao.impl.UsuarioDAOImpl;
 import dao.interfaces.IDepartamentoDAO;
+import dao.interfaces.IUsuarioDAO;
 import model.Departamento;
 import view.table.ButtonEditor;
 import view.table.ButtonRenderer;
@@ -15,39 +17,62 @@ import java.util.List;
 
 public class MainFrame extends JFrame {
 
+    public JPanel Panel;
+    private JButton perfilButton, addButton, searchButton, alquilarButton1, alquilarButton2, alquilarButton;
+    private JTextField searchField;
+
     private JTable departamentosTable;
     private DefaultTableModel tableModel;
     private IDepartamentoDAO departamentosDAO;
-    private JTextField searchField;
     private DepartamentoController departamentoController;
 
+
     public MainFrame() {
-        setTitle("Departamentos disponibles");
-        setSize(900, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        // Configurar el layout del JFrame
         setLayout(new BorderLayout());
 
-        departamentosDAO = new DepartamentoDAOImpl();
-        departamentoController = new DepartamentoController(departamentosDAO); // Inicializar controlador
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        // Establecer un tamaño preferido para el JFrame
+        setPreferredSize(new Dimension(900, 600)); // Establecer tamaño preferido
+        pack(); // Ajusta el JFrame al tamaño preferido
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximiza la ventana al inicio
+
+        // Centrar la ventana en la pantalla
+        setLocationRelativeTo(null);  // Esto asegura que la ventana se centre al abrirse
+
+        // Crear los paneles y agregar componentes
         JPanel topPanel = new JPanel(new BorderLayout());
-        searchField = new JTextField(20);
-        JButton searchButton = new JButton("Buscar");
-        JButton addButton = new JButton("Agregar Departamento");
+        JPanel eastPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0)); // Ajusta el espacio entre botones
+        eastPanel.add(searchButton);
+        eastPanel.add(perfilButton);
 
         topPanel.add(searchField, BorderLayout.CENTER);
-        topPanel.add(searchButton, BorderLayout.EAST);
+        topPanel.add(eastPanel, BorderLayout.EAST); // Añadir el panel al este
         topPanel.add(addButton, BorderLayout.WEST);
 
         add(topPanel, BorderLayout.NORTH);
 
-        // Configurar tabla y modelo
+        departamentosDAO = new DepartamentoDAOImpl();
+        departamentoController = new DepartamentoController(departamentosDAO); // Inicializar controlador
+
         String[] columnNames = {"ID", "Descripción", "Estado", "Precio", "Ciudad", "Habitaciones", "Baños", "Capacidad", "Dirección", "Acción"};
         tableModel = new DefaultTableModel(columnNames, 0);
         departamentosTable = new JTable(tableModel);
-        departamentosTable.getColumn("Acción").setCellRenderer(new ButtonRenderer());
-        departamentosTable.getColumn("Acción").setCellEditor(new ButtonEditor(new JCheckBox(), this, departamentosDAO));
+
+        // Ajustar la altura de las filas
+        departamentosTable.setRowHeight(40); // Cambia 40 por el valor deseado
+
+        // Ajustar el espaciado entre celdas: (ancho, alto)
+        departamentosTable.setIntercellSpacing(new Dimension(0, 10)); // 10 píxeles de separación vertical
+
+        // Opcional: configurar color de líneas de la grilla para mayor claridad
+        departamentosTable.setShowGrid(true);
+        departamentosTable.setGridColor(Color.LIGHT_GRAY);
+
+        // Configurar renderizador y editor con el botón personalizado
+        departamentosTable.getColumn("Acción").setCellRenderer(new ButtonRenderer(alquilarButton1));
+        departamentosTable.getColumn("Acción").setCellEditor(new ButtonEditor(new JCheckBox(), this, departamentosDAO, alquilarButton1));
 
         add(new JScrollPane(departamentosTable), BorderLayout.CENTER);
 
@@ -56,6 +81,7 @@ public class MainFrame extends JFrame {
         searchButton.addActionListener(e -> buscarDepartamento());
         addButton.addActionListener(e -> abrirFormularioAgregar());
     }
+
 
     public void cargarTabla() {
         try {
@@ -105,12 +131,16 @@ public class MainFrame extends JFrame {
         }
     }
 
+
     public void abrirFormularioAgregar() {
         AgregarDepartamentoFrame agregarFrame = new AgregarDepartamentoFrame(this, departamentoController);
+        //AddDepartFrame addDepartFrame = new AddDepartFrame(this, departamentoController);
         agregarFrame.setVisible(true);
+        //aaddDepartFrame.setVisible(true);
     }
 
     public void abrirFormularioAlquilar(Departamento departamento) {
+        // Pasa el controlador al frame de alquiler
         new AlquilarDepartamentoFrame(this, departamento).setVisible(true);
     }
 }

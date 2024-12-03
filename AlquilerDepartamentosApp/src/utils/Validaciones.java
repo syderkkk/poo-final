@@ -1,7 +1,5 @@
 package utils;
 
-import model.Departamento;
-
 import javax.swing.*;
 import java.util.regex.Pattern;
 

@@ -3,7 +3,6 @@ package controller;
 import dao.impl.DepartamentoDAOImpl;
 import dao.interfaces.IDepartamentoDAO;
 import model.Departamento;
-import view.AlquilarDepartamentoFrame;
 import view.MainFrame;
 
 import javax.swing.*;
@@ -11,31 +10,37 @@ import java.sql.SQLException;
 
 public class AlquilerController {
 
-    // Método para alquilar un departamento
-    public void alquilarDepartamento(AlquilarDepartamentoFrame frame, Departamento departamento, JFrame parent) {
+    private IDepartamentoDAO departamentosDAO;
+
+    public AlquilerController() {
+        this.departamentosDAO = new DepartamentoDAOImpl();
+    }
+
+    // Método para manejar el proceso de alquiler
+    public void alquilarDepartamento(Departamento departamento, JFrame currentFrame, JFrame parentFrame) {
         try {
+            departamento.setEstado("Alquilado"); // Cambiar estado
+            departamentosDAO.actualizar(departamento); // Actualizar en base de datos
 
-            departamento.setEstado("Alquilado"); // Cambiar el estado del departamento a "Alquilado"
-            IDepartamentoDAO departamentosDAO = new DepartamentoDAOImpl(); // Crear el objeto DAO para la actualización
+            if (parentFrame instanceof MainFrame) {
+                ((MainFrame) parentFrame).cargarTabla(); // Actualizar tabla en MainFrame
+            }
 
-            departamentosDAO.actualizar(departamento); // Actualizar el estado del departamento en la base de datos
-
-            ((MainFrame) parent).cargarTabla(); //Actualizacion de los datos en tabla de MainFrame
-
-            regresar(frame, parent);
-
-            // Mostrar mensaje de éxito
-            JOptionPane.showMessageDialog(frame, "Departamento alquilado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
+            mostrarMensaje(currentFrame, "Departamento alquilado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            regresarAlMainFrame(currentFrame, parentFrame);
         } catch (SQLException ex) {
-            // En caso de error, mostrar mensaje de error
-            JOptionPane.showMessageDialog(frame, "Error al alquilar el departamento: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            mostrarMensaje(currentFrame, "Error al alquilar el departamento: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    // Método para regresar al MainFrame sin hacer cambios
-    public void regresar(AlquilarDepartamentoFrame frame, JFrame parent) {
-        frame.dispose();  // Cerrar el formulario de alquiler
-        parent.setVisible(true);  // Mostrar el MainFrame nuevamente
+    // Método para cerrar el frame actual y regresar al principal
+    public void regresarAlMainFrame(JFrame currentFrame, JFrame parentFrame) {
+        currentFrame.dispose(); // Cerrar el frame actual
+        parentFrame.setVisible(true); // Mostrar el frame principal
+    }
+
+    // Método para mostrar mensajes
+    private void mostrarMensaje(JFrame frame, String mensaje, String titulo, int tipoMensaje) {
+        JOptionPane.showMessageDialog(frame, mensaje, titulo, tipoMensaje);
     }
 }
