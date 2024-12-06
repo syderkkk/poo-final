@@ -72,5 +72,4 @@ public class AlquilerController {
     private void mostrarMensaje(JFrame frame, String mensaje, String titulo, int tipoMensaje) {
         JOptionPane.showMessageDialog(frame, mensaje, titulo, tipoMensaje);
     }
-
 }

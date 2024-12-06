@@ -48,7 +48,6 @@ public class LoginController {
         }
     }
 
-
     // Manejar la transición al registro
     public void handleRegister() {
         loginFrame.dispose();
