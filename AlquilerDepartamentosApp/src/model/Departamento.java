@@ -5,7 +5,7 @@ public class Departamento {
     private int idDepartamento;
     private int idPropietario;
     private String descripcion;
-    private String estado; // Ejemplo: "Disponible" o "Ocupado"
+    private String estado;
     private double precioAlquiler;
     private String ciudad;
     private int numeroHabitaciones;
@@ -13,10 +13,8 @@ public class Departamento {
     private int capacidad;
     private String direccion;
 
-    // Constructor vacío
     public Departamento() {}
 
-    // Constructor completo
     public Departamento(int idDepartamento, int idPropietario, String descripcion, String estado, double precioAlquiler, String ciudad, int numeroHabitaciones, int numeroBanos, int capacidad, String direccion) {
         this.idDepartamento = idDepartamento;
         this.idPropietario = idPropietario;
@@ -29,8 +27,6 @@ public class Departamento {
         this.capacidad = capacidad;
         this.direccion = direccion;
     }
-
-    // Getters y Setters
 
     public int getIdDepartamento() {
         return idDepartamento;

@@ -1,28 +1,27 @@
 package model;
 
-public class Cliente {
+public class Usuario {
 
     private int id;
-    private String nombre;
+    private String nombres;
     private String apellidos;
     private String telefono;
     private String direccion;
-    private String tipoUsuario; // Ejemplo: "Propietario" o "Inquilino"
     private String correo;
     private String contrasena;
+    private double saldo;
 
-    public Cliente(int id, String nombre, String apellidos, String telefono, String direccion, String tipoUsuario, String correo, String contrasena) {
+    public Usuario(int id, String nombres, String apellidos, String telefono, String direccion, String correo, String contrasena, double saldo) {
         this.id = id;
-        this.nombre = nombre;
+        this.nombres = nombres;
         this.apellidos = apellidos;
         this.telefono = telefono;
         this.direccion = direccion;
-        this.tipoUsuario = tipoUsuario;
         this.correo = correo;
         this.contrasena = contrasena;
+        this.saldo = saldo;
     }
 
-    // Getters y Setters
     public int getId() {
         return id;
     }
@@ -31,12 +30,12 @@ public class Cliente {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getNombres() {
+        return nombres;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNombres(String nombres) {
+        this.nombres = nombres;
     }
 
     public String getApellidos() {
@@ -63,14 +62,6 @@ public class Cliente {
         this.direccion = direccion;
     }
 
-    public String getTipoUsuario() {
-        return tipoUsuario;
-    }
-
-    public void setTipoUsuario(String tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
-    }
-
     public String getCorreo() {
         return correo;
     }
@@ -85,5 +76,13 @@ public class Cliente {
 
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
     }
 }
