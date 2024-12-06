@@ -30,9 +30,9 @@ public class UsuarioDAOImpl implements IUsuarioDAO {
 
     @Override
     public Usuario obtenerUsuarioPorCorreo(String correo) throws SQLException {
-        Connection conexion = ConexionBD.getConnection();
         String query = "SELECT * FROM usuarios WHERE correo = ?";
-        try (PreparedStatement stmt = conexion.prepareStatement(query)) {
+        try (Connection conexion = ConexionBD.getConnection();
+             PreparedStatement stmt = conexion.prepareStatement(query)) {
             stmt.setString(1, correo);
             ResultSet rs = stmt.executeQuery();
 

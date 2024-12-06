@@ -30,7 +30,10 @@ public class DepartamentoDAOImpl implements IDepartamentoDAO {
                         resultSet.getInt("numeroHabitaciones"),
                         resultSet.getInt("numeroBanos"),
                         resultSet.getInt("capacidad"),
-                        resultSet.getString("direccion")
+                        resultSet.getString("direccion"),
+                        // Obtener las fechas de la base de datos, manejando null si es necesario
+                        resultSet.getTimestamp("fecha_alquiler"),
+                        resultSet.getTimestamp("fecha_vencimiento")
                 );
                 departamentos.add(departamento);
             }
@@ -136,5 +139,31 @@ public class DepartamentoDAOImpl implements IDepartamentoDAO {
              }
         }
         return departamentos;
+    }
+
+    public void actualizarFechaAlquiler(int idDepartamento, Timestamp fechaAlquiler, Timestamp fechaVencimiento) throws SQLException {
+        String query = "UPDATE Departamentos SET fecha_alquiler = ?, fecha_vencimiento = ? WHERE id_departamento = ?";
+        try (Connection connection = ConexionBD.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            // Usar setTimestamp para valores de tipo java.sql.Timestamp
+            stmt.setTimestamp(1, fechaAlquiler); // Fecha actual (con hora y segundos)
+            stmt.setTimestamp(2, fechaVencimiento); // Fecha de vencimiento
+            stmt.setInt(3, idDepartamento);
+
+            stmt.executeUpdate();
+        }
+    }
+
+    public void actualizarEstadoDepartamento(int idDepartamento) throws SQLException {
+        String query = "UPDATE Departamentos " +
+                "SET ID_Usuario = NULL, fecha_alquiler = NULL, fecha_vencimiento = NULL, estado = 'Disponible' " +
+                "WHERE ID_Departamento = ?";
+
+        try (Connection connection = ConexionBD.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, idDepartamento);
+            statement.executeUpdate();
+        }
     }
 }

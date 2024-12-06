@@ -38,6 +38,14 @@ public class Usuario {
         this.nombres = nombres;
     }
 
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
     public String getTelefono() {
         return telefono;
     }

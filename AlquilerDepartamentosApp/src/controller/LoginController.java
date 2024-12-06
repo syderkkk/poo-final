@@ -14,8 +14,6 @@ public class LoginController {
     private final LoginFrame loginFrame;
     private final IUsuarioDAO usuarioDAO;
 
-    private Usuario usuarioActual;
-
     public LoginController(LoginFrame loginFrame, IUsuarioDAO usuarioDAO) {
         this.loginFrame = loginFrame;
         this.usuarioDAO = usuarioDAO;
@@ -27,18 +25,18 @@ public class LoginController {
 
         try {
             // Obtener el usuario de la base de datos
-            Usuario usuarioActual = usuarioDAO.obtenerUsuarioPorCorreo(correo);
+            Usuario usuario = usuarioDAO.obtenerUsuarioPorCorreo(correo);
 
             // Validar credenciales
-            if (usuarioActual == null || !usuarioActual.getContrasena().equals(contrasena)) {
+            if (usuario == null || !usuario.getContrasena().equals(contrasena)) {
                 loginFrame.mostrarMensaje("Correo o contraseña incorrectos.", "Error de autenticación", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // Guardar el usuario autenticado en UsuarioSession
-            UsuarioSession.getInstance().setUsuarioActual(usuarioActual);
+            UsuarioSession.getInstance().setUsuarioActual(usuario);
 
-            // Mostrar mensaje y abrir la ventana principal
+            // Abrir la ventana principal
             loginFrame.dispose();
             new MainFrame().setVisible(true); // Ya no pasamos el usuario aquí, usamos el Singleton
 
@@ -47,6 +45,7 @@ public class LoginController {
             loginFrame.mostrarMensaje("Error al autenticar usuario: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     // Manejar la transición al registro
     public void handleRegister() {

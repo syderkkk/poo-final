@@ -17,7 +17,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MainFrame extends JFrame {
 
@@ -29,6 +33,7 @@ public class MainFrame extends JFrame {
     private DefaultTableModel tableModel;
     private IDepartamentoDAO departamentosDAO;
     private DepartamentoController departamentoController;
+    private ScheduledExecutorService scheduler;
 
 
     public MainFrame() {
@@ -92,10 +97,51 @@ public class MainFrame extends JFrame {
 
         cargarTabla();
 
+        // Configurar el Timer para que actualice la tabla cada segundo
+        Timer timer = new Timer(1000, e -> cargarTabla()); // 1000ms = 1 segundo
+        timer.start();
+
         searchButton.addActionListener(e -> buscarDepartamento(usuarioActual));
         addButton.addActionListener(e -> abrirFormularioAgregar());
         perfilButton.addActionListener(e -> abrirPerfilFrame());
+
+        iniciarScheduler();
+
     }
+
+    private void iniciarScheduler() {
+        scheduler = Executors.newScheduledThreadPool(1);
+
+        // Tarea programada para revisar fechas de vencimiento cada 10 segundos
+        scheduler.scheduleAtFixedRate(() -> {
+            try {
+                verificarYActualizarFechas();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, 0, 10, TimeUnit.SECONDS); // Cambia el intervalo según sea necesario
+    }
+
+    private void verificarYActualizarFechas() throws SQLException {
+        List<Departamento> departamentos = departamentosDAO.obtenerTodos();
+        Timestamp ahora = new Timestamp(System.currentTimeMillis());  // Obtén la fecha actual solo una vez
+
+        for (Departamento departamento : departamentos) {
+            // Verifica si la fecha de vencimiento no es null antes de hacer la comparación
+            if (departamento.getFechaVencimiento() != null && departamento.getFechaVencimiento().before(ahora)) {
+                // Actualizar el estado del departamento si está vencido
+                departamentosDAO.actualizarEstadoDepartamento(departamento.getIdDepartamento());
+                System.out.println("El departamento con ID " + departamento.getIdDepartamento() + " ha sido marcado como Disponible.");
+            } else if (departamento.getFechaVencimiento() == null) {
+                System.out.println("El departamento con ID " + departamento.getIdDepartamento() + " no tiene fecha de vencimiento.");
+                // Aquí puedes decidir si quieres hacer algo con los departamentos sin fecha de vencimiento
+            }
+        }
+
+        // Llamar al método cargarTabla() para actualizar la interfaz gráfica
+        SwingUtilities.invokeLater(this::cargarTabla);
+    }
+
 
     private void initComponents() {
         setTitle("Ventana principal");

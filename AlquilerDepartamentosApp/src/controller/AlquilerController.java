@@ -11,6 +11,9 @@ import view.MainFrame;
 
 import javax.swing.*;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class AlquilerController {
 
@@ -24,7 +27,7 @@ public class AlquilerController {
     }
 
     // Método para manejar el proceso de alquiler
-    public void alquilarDepartamento(Departamento departamento, JFrame currentFrame, JFrame parentFrame) {
+    public void alquilarDepartamento(Departamento departamento, JFrame currentFrame, JFrame parentFrame, int mesesAlquiler) {
         try {
             // Verificar si el departamento ya está alquilado
             if ("Ocupado".equalsIgnoreCase(departamento.getEstado())) {
@@ -42,6 +45,23 @@ public class AlquilerController {
                 departamento.setEstado("Ocupado");
                 departamento.setIdPropietario(usuarioActual.getId());
                 departamentosDAO.actualizar(departamento);
+
+                // Obtener la fecha y hora actual
+                LocalDateTime now = LocalDateTime.now(); // Fecha y hora actual
+                LocalDateTime fechaVencimiento = now.plusSeconds(mesesAlquiler); // Sumar segundos para pruebas
+
+                // Convertir a java.sql.Timestamp para almacenar en la base de datos
+                Timestamp sqlFechaInicio = Timestamp.valueOf(now);
+                Timestamp sqlFechaVencimiento = Timestamp.valueOf(fechaVencimiento);
+
+                // Pasar las fechas al DAO
+                departamentosDAO.actualizarFechaAlquiler(
+                        departamento.getIdDepartamento(),
+                        sqlFechaInicio,
+                        sqlFechaVencimiento
+                );
+
+
 
                 // Actualizar UI
                 if (parentFrame instanceof MainFrame) {
@@ -61,7 +81,6 @@ public class AlquilerController {
             mostrarMensaje(currentFrame, "Ha ocurrido un error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
     // Método para cerrar el frame actual y regresar al principal
     public void regresarAlMainFrame(JFrame currentFrame, JFrame parentFrame) {
         currentFrame.dispose();
@@ -72,4 +91,5 @@ public class AlquilerController {
     private void mostrarMensaje(JFrame frame, String mensaje, String titulo, int tipoMensaje) {
         JOptionPane.showMessageDialog(frame, mensaje, titulo, tipoMensaje);
     }
+
 }

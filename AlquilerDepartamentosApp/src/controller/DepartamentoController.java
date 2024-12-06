@@ -21,7 +21,7 @@ public class DepartamentoController {
                                     JFrame parent) throws SQLException {
 
         // Validar campos ( MEJORAR )
-        if (!Validaciones.noVacio(descripcion,  "Descripción no puede estar vacía") ||
+        if (!Validaciones.noVacio(descripcion, "Descripción no puede estar vacía") ||
                 !Validaciones.noVacio(ciudad, "Ciudad no puede estar vacía") ||
                 !Validaciones.noVacio(direccion, "Dirección no puede estar vacía") ||
                 !Validaciones.noVacio(precioStr, "Precio no puede estar vacío") ||

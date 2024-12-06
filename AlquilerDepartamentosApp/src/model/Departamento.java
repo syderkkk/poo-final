@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.Timestamp;
+
 public class Departamento {
 
     private int idDepartamento;
@@ -12,6 +14,8 @@ public class Departamento {
     private int numeroBanos;
     private int capacidad;
     private String direccion;
+    private Timestamp fechaAlquiler;
+    private Timestamp fechaVencimiento;
 
     public Departamento() {}
 
@@ -26,6 +30,21 @@ public class Departamento {
         this.numeroBanos = numeroBanos;
         this.capacidad = capacidad;
         this.direccion = direccion;
+    }
+
+    public Departamento(int idDepartamento, int idPropietario, String descripcion, String estado, double precioAlquiler, String ciudad, int numeroHabitaciones, int numeroBanos, int capacidad, String direccion, Timestamp fechaAlquiler, Timestamp fechaVencimiento) {
+        this.idDepartamento = idDepartamento;
+        this.idPropietario = idPropietario;
+        this.descripcion = descripcion;
+        this.estado = estado;
+        this.precioAlquiler = precioAlquiler;
+        this.ciudad = ciudad;
+        this.numeroHabitaciones = numeroHabitaciones;
+        this.numeroBanos = numeroBanos;
+        this.capacidad = capacidad;
+        this.direccion = direccion;
+        this.fechaAlquiler = fechaAlquiler;
+        this.fechaVencimiento = fechaVencimiento;
     }
 
     public int getIdDepartamento() {
@@ -106,5 +125,21 @@ public class Departamento {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    public Timestamp getFechaAlquiler() {
+        return fechaAlquiler;
+    }
+
+    public void setFechaAlquiler(Timestamp fechaAlquiler) {
+        this.fechaAlquiler = fechaAlquiler;
+    }
+
+    public Timestamp getFechaVencimiento() {
+        return fechaVencimiento;
+    }
+
+    public void setFechaVencimiento(Timestamp fechaVencimiento) {
+        this.fechaVencimiento = fechaVencimiento;
     }
 }
