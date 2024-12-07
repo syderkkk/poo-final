@@ -14,9 +14,9 @@ public class UsuarioDAOImpl implements IUsuarioDAO {
     @Override
     public void insertarUsuario(Usuario usuario) throws SQLException {
         Connection conexion = ConexionBD.getConnection();
-        String sql = "INSERT INTO usuarios (nombres, apellidos, telefono, direccion, correo, contrasena) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO usuarios (nombres, apellidos, telefono, direccion, correo, contrasena) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
+        try (PreparedStatement statement = conexion.prepareStatement(query)) {
             statement.setString(1, usuario.getNombres());
             statement.setString(2, usuario.getApellidos());
             statement.setString(3, usuario.getTelefono());
@@ -55,9 +55,9 @@ public class UsuarioDAOImpl implements IUsuarioDAO {
     @Override
     public void actualizarSaldo(Usuario usuario) throws SQLException {
         Connection conexion = ConexionBD.getConnection();
-        String sql = "UPDATE usuarios SET saldo = ? WHERE correo = ?";
+        String query = "UPDATE usuarios SET saldo = ? WHERE correo = ?";
 
-        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
+        try (PreparedStatement statement = conexion.prepareStatement(query)) {
             statement.setDouble(1, usuario.getSaldo());
             statement.setString(2, usuario.getCorreo());
 
@@ -67,9 +67,9 @@ public class UsuarioDAOImpl implements IUsuarioDAO {
 
     @Override
     public void cargarSaldo(int userId, double monto) throws SQLException {
-        String sql = "UPDATE usuarios SET saldo = saldo + ? WHERE ID_Usuario = ?";
+        String query = "UPDATE usuarios SET saldo = saldo + ? WHERE ID_Usuario = ?";
         try (Connection conn = ConexionBD.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setDouble(1, monto);
             stmt.setInt(2, userId);

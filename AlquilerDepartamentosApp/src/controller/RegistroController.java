@@ -21,7 +21,6 @@ public class RegistroController {
 
         // Usar Validaciones para validar los campos
 
-
         if (Validaciones.validarCampos(nombres, apellidos, telefono, direccion, correo, contrasena)) {
             if (!Validaciones.validarNombre(nombres) || !Validaciones.validarNombre(apellidos)) {
                 return;
@@ -37,7 +36,6 @@ public class RegistroController {
                 JOptionPane.showMessageDialog(frame, "Error al registrar usuario: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-
     }
 
     public void cancelarRegistro() {

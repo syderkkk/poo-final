@@ -146,9 +146,8 @@ public class DepartamentoDAOImpl implements IDepartamentoDAO {
         try (Connection connection = ConexionBD.getConnection();
              PreparedStatement stmt = connection.prepareStatement(query)) {
 
-            // Usar setTimestamp para valores de tipo java.sql.Timestamp
-            stmt.setTimestamp(1, fechaAlquiler); // Fecha actual (con hora y segundos)
-            stmt.setTimestamp(2, fechaVencimiento); // Fecha de vencimiento
+            stmt.setTimestamp(1, fechaAlquiler);
+            stmt.setTimestamp(2, fechaVencimiento);
             stmt.setInt(3, idDepartamento);
 
             stmt.executeUpdate();

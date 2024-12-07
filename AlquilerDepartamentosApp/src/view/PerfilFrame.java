@@ -32,11 +32,9 @@ public class PerfilFrame extends JFrame {
         correoField.setText(usuarioActual.getCorreo());
         saldoField.setText(String.valueOf(usuarioActual.getSaldo()));
 
-
         // Instanciar DAO y controlador
         IUsuarioDAO usuarioDAO = new UsuarioDAOImpl();
         PerfilController perfilController = new PerfilController(this, usuarioDAO);
-
 
         // Cargar departamentos
         departamentosDAO = new DepartamentoDAOImpl();

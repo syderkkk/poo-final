@@ -12,7 +12,6 @@ import view.MainFrame;
 import javax.swing.*;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class AlquilerController {
@@ -30,7 +29,7 @@ public class AlquilerController {
     public void alquilarDepartamento(Departamento departamento, JFrame currentFrame, JFrame parentFrame, int mesesAlquiler) {
         try {
             // Verificar si el departamento ya está alquilado
-            if ("Ocupado".equalsIgnoreCase(departamento.getEstado())) {
+            if (departamento.getEstado().equalsIgnoreCase("Ocupado")) {
                 mostrarMensaje(currentFrame, "El departamento se encuentra ocupado.", "Error", JOptionPane.ERROR_MESSAGE);
                 return; // Salir del método sin realizar el alquiler
             }

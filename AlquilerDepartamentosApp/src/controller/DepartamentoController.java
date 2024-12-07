@@ -60,7 +60,6 @@ public class DepartamentoController {
 
             ((MainFrame) parent).cargarTabla();
             frame.dispose();
-            parent.setVisible(true);
 
             JOptionPane.showMessageDialog(frame, "Departamento agregado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException ex) {

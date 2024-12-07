@@ -31,7 +31,6 @@ public class RegistroFrame extends JFrame{
             registroController.registrarUsuario(1,nombres, apellidos, telefono, direccion, correo, contrasena);
         });
 
-        // Acción del botón Cancelar
         cancelarButton.addActionListener(e -> registroController.cancelarRegistro());
     }
 

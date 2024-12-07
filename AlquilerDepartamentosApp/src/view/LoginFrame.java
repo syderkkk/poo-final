@@ -28,6 +28,7 @@ public class LoginFrame extends JFrame {
         loginButton.addActionListener(e -> {
             loginController.handleLogin();
         });
+
         registerButton.addActionListener(e -> {
             loginController.handleRegister();
         });
